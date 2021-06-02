@@ -1,0 +1,7 @@
+var a = 12;
+
+while (a < 22;) {
+  a = a+1;
+};
+
+println(a);
