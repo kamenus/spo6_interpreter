@@ -1,9 +1,33 @@
-a = 12;
+a = Array[1, 2, 3];
+b = Array[0, 1, 2];
+
+println(a[b[1]]);
+a[b[1]] = 12;
+println(a[b[1]]);
+
+test = 12;
+
+while (test < 22) {
+  test = test + 1;
+};
+
+println(test);
+
+c = "sample_string";
+bool = true;
 
 testFunc = function(a, b) a = a + b;
 
-if (a < 22) {
-  a = a+1;
+if (false) then {
+  test = a+1;
+  c = "11";
+} else {
+  c = "ifs else";
 };
 
-println(testFunc(a, 15));
+println(testFunc(test, 15));
+println(c);
+
+if (bool) {
+  println(bool);
+};

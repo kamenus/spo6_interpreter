@@ -16,6 +16,11 @@ function parse(input) {
     return tok && tok.type == "punc" && (!ch || tok.value == ch) && tok;
   }
 
+  // function is_index(ch) {
+  //   const tok = input.peek();
+  //   return tok && tok.type == "index" && (!ch || tok.value == ch) && tok;
+  // }
+
   function is_kw(kw) {
     const tok = input.peek();
     return tok && tok.type == "kw" && (!kw || tok.value == kw) && tok;
@@ -103,8 +108,8 @@ function parse(input) {
     const then = parse_expression();
     const ret = {
       type: "if",
-      cond: cond,
-      then: then,
+      cond,
+      then,
     };
 
     if (is_kw("else")) {
@@ -113,6 +118,41 @@ function parse(input) {
     }
 
     return ret;
+  }
+
+  function parse_while() {
+    skip_kw("while");
+    const cond = parse_expression();
+
+    const body = parse_expression();
+    const ret = {
+      type: "while",
+      cond,
+      body
+    }
+
+    return ret
+  }
+
+  function parse_array() {
+    skip_kw("Array");
+    const data = delimited("[", "]", ",", parse_atom);
+    return {
+      type: "array",
+      data
+    }
+  }
+
+  function parse_getIndex(array) {
+    skip_punc('[');
+    const index = parse_atom();
+    skip_punc(']');
+
+    return {
+      type: "getIndex",
+      left: array,
+      right: index
+    }
   }
 
   function parse_lambda() {
@@ -125,8 +165,8 @@ function parse(input) {
 
   function parse_bool() {
     return {
-      type  : "bool",
-      value : input.next().value == "true"
+      type: "bool",
+      value: input.next().value == "true"
     };
   }
 
@@ -145,6 +185,8 @@ function parse(input) {
       }
       if (is_punc("{")) return parse_prog();
       if (is_kw("if")) return parse_if();
+      if (is_kw("while")) return parse_while();
+      if (is_kw("Array")) return parse_array();
       if (is_kw("true") || is_kw("false")) return parse_bool();
       if (is_kw("lambda") || is_kw("function")) {
         input.next();
@@ -152,6 +194,10 @@ function parse(input) {
       }
 
       const tok = input.next();
+
+      if (tok.type == "var" && is_punc("[")) {
+        return parse_getIndex(tok)
+      }
       if (tok.type == "var" || tok.type == "num" || tok.type == "str")
         return tok;
 

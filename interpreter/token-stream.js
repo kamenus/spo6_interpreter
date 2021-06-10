@@ -1,6 +1,16 @@
 function TokenStream(input) {
   let current = null;
-  let keywords = ['if', 'then', 'else', 'lambda', 'function', 'true', 'false'];
+  let keywords = [
+    'if',
+    'then',
+    'else',
+    'lambda',
+    'function',
+    'true',
+    'false',
+    'while',
+    'Array'
+  ];
 
   function is_keyword(x) {
     return keywords.includes(x);
@@ -25,6 +35,10 @@ function TokenStream(input) {
   function is_punc(ch) {
     return ",;(){}[]".indexOf(ch) >= 0;
   }
+
+  // function is_index(ch) {
+  //   return "[]".indexOf(ch) >= 0;
+  // }
 
   function is_whitespace(ch) {
     return " \t\n".indexOf(ch) >= 0;
@@ -103,6 +117,10 @@ function TokenStream(input) {
       type: "punc",
       value: input.next()
     };
+    // if (is_index(ch)) return {
+    //   type: "index",
+    //   value: input.next()
+    // }
     if (is_op_char(ch)) return {
       type: "op",
       value: read_while(is_op_char)

@@ -26,6 +26,12 @@ Environment.prototype = {
       throw new Error("Undefined variable " + name);
     return (scope || this).vars[name] = value;
   },
+  setProperty: function(name, property, value) {
+    const scope = this.lookup(name);
+    if (!scope && this.parent)
+      throw new Error("Undefined variable " + name);
+    return (scope || this).vars[name][property] = value;
+  },
   def: function(name, value) {
     return this.vars[name] = value;
   }
