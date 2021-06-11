@@ -31,3 +31,7 @@ println(c);
 if (bool) {
   println(bool);
 };
+
+testPop = a.pop();
+
+println(testPop);

@@ -14,7 +14,7 @@ function evaluate(exp, env) {
     case "assign": {
       if (exp.left.type === "getIndex") {
         const [array, index, value] = set_index(env, exp.left);
-        return env.setProperty(array, index, evaluate(exp.right, env))
+        return env.set(array, evaluate(exp.right, env), index)
       } else {
         return env.set(exp.left.value, evaluate(exp.right, env));
       }
@@ -28,6 +28,9 @@ function evaluate(exp, env) {
 
     case "getIndex":
       return get_index(env, exp);
+
+    case "method":
+      return make_method(env, exp);
 
     case "if": {
       const cond = evaluate(exp.cond, env);
@@ -127,6 +130,14 @@ function make_lambda(env, exp) {
   }
 
   return lambda;
+}
+
+function make_method(env, exp) {
+  const source = exp.var.value;
+  const { func, args } = exp.method;
+  const props = args.map(el => evaluate(el))
+
+  return env.emit(source, func.value, props);
 }
 
 module.exports = evaluate

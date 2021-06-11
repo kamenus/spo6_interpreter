@@ -155,6 +155,16 @@ function parse(input) {
     }
   }
 
+  function parse_method(tok) {
+    skip_punc('.');
+
+    return {
+      type: "method",
+      var: tok,
+      method: parse_expression()
+    }
+  }
+
   function parse_lambda() {
     return {
       type: "lambda",
@@ -195,10 +205,12 @@ function parse(input) {
 
       const tok = input.next();
 
-      if (tok.type == "var" && is_punc("[")) {
-        return parse_getIndex(tok)
+      if (tok.type == "var") {
+        if (is_punc("[")) return parse_getIndex(tok)
+        if (is_punc(".")) return parse_method(tok)
+        return tok;
       }
-      if (tok.type == "var" || tok.type == "num" || tok.type == "str")
+      if (tok.type == "num" || tok.type == "str" || tok.type == "method")
         return tok;
 
       unexpected();

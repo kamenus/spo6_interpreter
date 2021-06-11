@@ -20,17 +20,19 @@ Environment.prototype = {
       return this.vars[name];
     throw new Error("Undefined variable " + name);
   },
-  set: function(name, value) {
+  set: function(name, value, property) {
     const scope = this.lookup(name);
     if (!scope && this.parent)
       throw new Error("Undefined variable " + name);
-    return (scope || this).vars[name] = value;
+    return property === undefined
+      ? (scope || this).vars[name] = value
+      : (scope || this).vars[name][property] = value;
   },
-  setProperty: function(name, property, value) {
+  emit: function(name, method, args = []) {
     const scope = this.lookup(name);
     if (!scope && this.parent)
       throw new Error("Undefined variable " + name);
-    return (scope || this).vars[name][property] = value;
+    return (scope || this).vars[name][method](...args);
   },
   def: function(name, value) {
     return this.vars[name] = value;

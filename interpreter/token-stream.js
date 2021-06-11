@@ -33,7 +33,7 @@ function TokenStream(input) {
   }
 
   function is_punc(ch) {
-    return ",;(){}[]".indexOf(ch) >= 0;
+    return ".,;(){}[]".indexOf(ch) >= 0;
   }
 
   // function is_index(ch) {

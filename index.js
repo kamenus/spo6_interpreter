@@ -11,6 +11,7 @@ function init() {
 
   Object.values(codeBase).forEach(codeString => {
     const AST = parse(TokenStream(InputStream(codeString)))
+    // console.log(JSON.stringify(AST))
     evaluate(AST, globalEnv)
   })
 }
