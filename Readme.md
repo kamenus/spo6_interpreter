@@ -14,3 +14,8 @@ Entrypoint: index.js
 Quick Launch: ```npm start```
 
 Installed Node.js is required
+
+Supports basic types, such as: number, string, boolean
+Implements if/then/else, while loop
+
+UPD: Added array support: get/set by element's index, basic methods (push, pop, etc.)
